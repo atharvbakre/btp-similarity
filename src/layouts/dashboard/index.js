@@ -61,7 +61,7 @@ import { barChartDataDashboard } from "layouts/dashboard/data/barChartData";
 import { barChartOptionsDashboard } from "layouts/dashboard/data/barChartOptions";
 
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function Dashboard() {
@@ -71,8 +71,15 @@ function Dashboard() {
   const [text1Content, setText1Content] = useState("");
   const [text2, setText2] = useState("");
   const [text2Content, setText2Content] = useState("");
+  const [docsChecked, setDocsChecked] = useState(0);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(0);
+
+  useEffect(() => {
+    axios.get("http://192.168.0.108:5000/docsChecked").then((res) => {
+      setDocsChecked(res.data.count);
+    });
+  });
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -123,7 +130,7 @@ function Dashboard() {
             <Grid item xs={12} md={6} xl={3}>
               <MiniStatisticsCard
                 title={{ text: "documents checked", fontWeight: "regular" }}
-                count="53,000"
+                count={docsChecked}
                 percentage={{ color: "success", text: "+55%" }}
                 icon={{ color: "info", component: <IoWallet size="22px" color="white" /> }}
               />
@@ -231,8 +238,8 @@ function Dashboard() {
             <Grid item xs={12} lg={6} xl={4}>
               <ReferralTracking
                 result={result * 10}
-                text1Length={text1Content.split(" ").length}
-                text2Length={text2Content.split(" ").length}
+                text1Length={text1Content === "" ? 0 : text1Content.split(" ").length}
+                text2Length={text2Content === "" ? 0 : text2Content.split(" ").length}
               />
             </Grid>
           </Grid>
