@@ -158,7 +158,7 @@ function ReferralTracking({ result, text1Length, text2Length }) {
                   },
                 })}
               >
-                85%
+                {85 + Math.round(result)}%
               </VuiTypography>
               <VuiTypography color="text" variant="button">
                 Total Score
